@@ -3,21 +3,17 @@ import random
 from typing import Dict, List
 
 import numpy as np
+import torch
 
 
 def set_seed(seed: int = 42) -> None:
     # FUSION MODIFICATION: ensure deterministic behavior for all experiment modes.
     random.seed(seed)
     np.random.seed(seed)
-    try:
-        import torch
-
-        torch.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = False
-    except Exception:
-        pass
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 
 def accuracy_score(y_true: np.ndarray, y_pred: np.ndarray) -> float:

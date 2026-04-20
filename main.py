@@ -1,4 +1,5 @@
 import argparse
+import math
 import os
 from copy import deepcopy
 from typing import Dict, List, Tuple
@@ -188,7 +189,7 @@ def run_all_experiments(args):
             m, feat, labels = train_and_eval(args, method_name=method, missing_rate=rate)
             row = {"dataset": args.dataset, "method": method, "missing_rate": rate, **m}
             rows.append(row)
-            if method == "Ours_fusion" and abs(rate - args.tsne_missing_rate) < 1e-9:
+            if method == "Ours_fusion" and math.isclose(rate, args.tsne_missing_rate, rel_tol=1e-9, abs_tol=1e-9):
                 tsne_feats, tsne_labels = feat, labels
 
     # FUSION MODIFICATION: ablation experiments.

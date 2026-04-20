@@ -6,6 +6,8 @@ import torch.nn.functional as F
 
 from layers import GCNLayer
 
+BETA_EPSILON = 1e-4
+
 
 class VLTransformer(nn.Module):
     # FUSION MODIFICATION: supports concatenating raw modal features with AEMVC kernel features.
@@ -47,7 +49,7 @@ class GraphLearn(nn.Module):
         self.weight = nn.Parameter(torch.ones(input_dim))
         self.use_prior_fusion = use_prior_fusion
         # FUSION MODIFICATION: clamp to avoid logit(0/1)->inf, preserving stable gradients at initialization.
-        safe_beta = float(min(max(init_beta, 1e-4), 1.0 - 1e-4))
+        safe_beta = float(min(max(init_beta, BETA_EPSILON), 1.0 - BETA_EPSILON))
         self.beta_logits = nn.Parameter(torch.logit(torch.tensor(safe_beta))) if use_prior_fusion else None
 
     def _weighted_cos_adj(self, x: torch.Tensor) -> torch.Tensor:

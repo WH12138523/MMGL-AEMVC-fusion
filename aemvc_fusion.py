@@ -87,7 +87,8 @@ class AEMVCFusion(nn.Module):
             x_filled = torch.where(feat_mask, x, torch.zeros_like(x))
             z, x_recon = self.autoencoders[modal](x_filled)
             latents[modal] = z
-            recon_loss = recon_loss + F.mse_loss(x_recon[feat_mask], x[feat_mask]) if feat_mask.any() else recon_loss
+            if feat_mask.any():
+                recon_loss = recon_loss + F.mse_loss(x_recon[feat_mask], x[feat_mask])
             lap = laplacian_from_features(x_filled, kernel_type=self.kernel_type)
             g_loss = g_loss + graph_reg(z, lap)
             k = get_k(z, kernel_type=self.kernel_type)
