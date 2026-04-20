@@ -145,6 +145,11 @@ def impute_test_using_train_stats(
         train_x = np.asarray(train_modal_data_dict[m], dtype=np.float32)
         test_x = np.asarray(test_modal_data_dict[m], dtype=np.float32).copy()
         col_mean = np.nanmean(train_x, axis=0)
+        # FUSION MODIFICATION: fallback for columns entirely NaN in training stats.
+        global_mean = np.nanmean(train_x)
+        if np.isnan(global_mean):
+            global_mean = 0.0
+        col_mean = np.where(np.isnan(col_mean), global_mean, col_mean)
         nan_idx = np.isnan(test_x)
         if nan_idx.any():
             test_x[nan_idx] = np.take(col_mean, np.where(nan_idx)[1])

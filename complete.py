@@ -23,6 +23,7 @@ def complete(
         return k
     if obs.sum() == 0:
         avg = torch.mean(torch.diag(k))
+        avg = torch.nan_to_num(avg, nan=1.0, posinf=1.0, neginf=0.0)
         return torch.eye(n, device=k.device, dtype=k.dtype) * avg
 
     obs_idx = torch.where(obs)[0]

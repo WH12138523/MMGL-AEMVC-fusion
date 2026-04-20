@@ -28,6 +28,7 @@ class VLTransformer(nn.Module):
                 if kernel_repr_dict is not None and m in kernel_repr_dict:
                     k = kernel_repr_dict[m]
                     # FUSION MODIFICATION: stable per-sample kernel feature extraction via row mean pooling.
+                    # We use row mean as a compact, low-variance summary of sample-to-all-sample affinity.
                     kfeat = torch.mean(k, dim=1, keepdim=True)
                 else:
                     # FUSION MODIFICATION: preserve dimensional compatibility when fusion kernels are unavailable.
@@ -45,7 +46,7 @@ class GraphLearn(nn.Module):
         super().__init__()
         self.weight = nn.Parameter(torch.ones(input_dim))
         self.use_prior_fusion = use_prior_fusion
-        # FUSION MODIFICATION: numerically stable learnable beta initialization in logit space.
+        # FUSION MODIFICATION: clamp to avoid logit(0/1)->inf, preserving stable gradients at initialization.
         safe_beta = float(min(max(init_beta, 1e-4), 1.0 - 1e-4))
         self.beta_logits = nn.Parameter(torch.logit(torch.tensor(safe_beta))) if use_prior_fusion else None
 

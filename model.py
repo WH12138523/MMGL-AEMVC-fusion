@@ -47,7 +47,7 @@ class EvalHelper(nn.Module):
         self.gnn = GAT(args.hidden_dim, args.hidden_dim, num_classes) if args.gnn_type == "gat" else GCN(args.hidden_dim, args.hidden_dim, num_classes)
 
         self.main_optimizer = torch.optim.Adam(
-            # FUSION MODIFICATION: chain parameter iterables to avoid accidental duplication.
+            # FUSION MODIFICATION: chain parameter iterables to avoid accidental duplication patterns.
             chain(self.transformer.parameters(), self.graph_learn.parameters(), self.gnn.parameters()),
             lr=args.lr,
             weight_decay=args.weight_decay,

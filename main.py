@@ -61,11 +61,16 @@ def _slice_dict(data: Dict[str, np.ndarray], idx: np.ndarray) -> Dict[str, np.nd
 def _slice_mask(mask_dict: Dict, idx: np.ndarray) -> Dict:
     mfo = mask_dict.get("modal_feature_observed", {})
     mso = mask_dict.get("modal_sample_observed", {})
+
+    def _sample_obs_for_modal(modal: str) -> np.ndarray:
+        # FUSION MODIFICATION: readability helper for safe fallback when sample-level mask is absent.
+        base = np.asarray(mfo[modal])
+        default = np.ones(base.shape[0], dtype=bool)
+        return np.asarray(mso.get(modal, default))[idx]
+
     return {
         "modal_feature_observed": {m: np.asarray(mm)[idx] for m, mm in mfo.items()},
-        "modal_sample_observed": {
-            m: np.asarray(mso.get(m, np.ones(np.asarray(mfo[m]).shape[0], dtype=bool)))[idx] for m in mfo
-        },
+        "modal_sample_observed": {m: _sample_obs_for_modal(m) for m in mfo},
         "meta": deepcopy(mask_dict.get("meta", {})),
     }
 
