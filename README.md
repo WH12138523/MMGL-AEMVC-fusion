@@ -17,7 +17,7 @@ pip install numpy torch matplotlib scikit-learn
 ## Main entry
 
 ```bash
-python /home/runner/work/MMGL-AEMVC-fusion/MMGL-AEMVC-fusion/main.py --help
+python main.py --help
 ```
 
 Key parameters:
@@ -36,15 +36,15 @@ Key parameters:
 ## Single run examples
 
 ```bash
-python /home/runner/work/MMGL-AEMVC-fusion/MMGL-AEMVC-fusion/main.py --dataset TADPOLE --impute_mode fusion
-python /home/runner/work/MMGL-AEMVC-fusion/MMGL-AEMVC-fusion/main.py --dataset ABIDE --impute_mode mean --missing_type mixed --mixed_sample_ratio 0.7
+python main.py --dataset TADPOLE --impute_mode fusion
+python main.py --dataset ABIDE --impute_mode mean --missing_type mixed --mixed_sample_ratio 0.7
 ```
 
 ## Full benchmark scripts
 
 ```bash
-bash /home/runner/work/MMGL-AEMVC-fusion/MMGL-AEMVC-fusion/run_tadpole_all.sh
-bash /home/runner/work/MMGL-AEMVC-fusion/MMGL-AEMVC-fusion/run_abide_all.sh
+bash run_tadpole_all.sh
+bash run_abide_all.sh
 ```
 
 ## Outputs

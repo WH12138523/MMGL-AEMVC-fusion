@@ -2,8 +2,9 @@
 set -euo pipefail
 
 # FUSION MODIFICATION: one-click TADPOLE benchmark runner.
-python /home/runner/work/MMGL-AEMVC-fusion/MMGL-AEMVC-fusion/main.py \
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+python "${SCRIPT_DIR}/main.py" \
   --dataset TADPOLE \
-  --output_dir /home/runner/work/MMGL-AEMVC-fusion/MMGL-AEMVC-fusion/outputs \
+  --output_dir "${SCRIPT_DIR}/outputs" \
   --missing_type sample \
   --target_modalities PET

@@ -188,18 +188,18 @@ def run_all_experiments(args):
 
     # FUSION MODIFICATION: ablation experiments.
     ablations = []
-    for name, mut in [
-        ("full", {}),
-        ("no_graph_reg", {"aemvc_lambda1": 0.0}),
-        ("no_hsic", {"aemvc_lambda2": 0.0}),
-        ("no_kernel_concat", {"disable_kernel_concat": True}),
-        ("no_joint_opt", {"impute_mode": "full_aemvc"}),
+    for spec in [
+        {"name": "full", "mut": {}, "method_name": "Ours_fusion"},
+        {"name": "no_graph_reg", "mut": {"aemvc_lambda1": 0.0}, "method_name": "Ours_fusion"},
+        {"name": "no_hsic", "mut": {"aemvc_lambda2": 0.0}, "method_name": "Ours_fusion"},
+        {"name": "no_kernel_concat", "mut": {"disable_kernel_concat": True}, "method_name": "Ours_fusion"},
+        {"name": "no_joint_opt", "mut": {"impute_mode": "full_aemvc"}, "method_name": "MMGL_full_AEMVC"},
     ]:
         cfg = deepcopy(args)
-        for k, v in mut.items():
+        for k, v in spec["mut"].items():
             setattr(cfg, k, v)
-        m, _, _ = train_and_eval(cfg, method_name="Ours_fusion" if name != "no_joint_opt" else "MMGL_full_AEMVC", missing_rate=args.ablation_missing_rate)
-        ablations.append({"dataset": args.dataset, "ablation": name, **m})
+        m, _, _ = train_and_eval(cfg, method_name=spec["method_name"], missing_rate=args.ablation_missing_rate)
+        ablations.append({"dataset": args.dataset, "ablation": spec["name"], **m})
 
     out_dir = os.path.join(args.output_dir, args.dataset.lower())
     ensure_dir(out_dir)

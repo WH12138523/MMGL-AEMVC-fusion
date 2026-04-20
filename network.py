@@ -45,7 +45,9 @@ class GraphLearn(nn.Module):
         super().__init__()
         self.weight = nn.Parameter(torch.ones(input_dim))
         self.use_prior_fusion = use_prior_fusion
-        self.beta_logits = nn.Parameter(torch.tensor(float(init_beta)).logit()) if use_prior_fusion else None
+        # FUSION MODIFICATION: numerically stable learnable beta initialization in logit space.
+        safe_beta = float(min(max(init_beta, 1e-4), 1.0 - 1e-4))
+        self.beta_logits = nn.Parameter(torch.logit(torch.tensor(safe_beta))) if use_prior_fusion else None
 
     def _weighted_cos_adj(self, x: torch.Tensor) -> torch.Tensor:
         w = torch.sigmoid(self.weight)
