@@ -189,7 +189,7 @@ def run_all_experiments(args):
             m, feat, labels = train_and_eval(args, method_name=method, missing_rate=rate)
             row = {"dataset": args.dataset, "method": method, "missing_rate": rate, **m}
             rows.append(row)
-            if method == "Ours_fusion" and math.isclose(rate, args.tsne_missing_rate, rel_tol=1e-9, abs_tol=1e-9):
+            if method == "Ours_fusion" and math.isclose(rate, args.tsne_missing_rate, rel_tol=1e-5, abs_tol=1e-6):
                 tsne_feats, tsne_labels = feat, labels
 
     # FUSION MODIFICATION: ablation experiments.

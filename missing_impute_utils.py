@@ -36,7 +36,8 @@ def _feature_level_missing(mask: np.ndarray, rate: float, rng: np.random.RandomS
 
 def _mixed_missing(mask: np.ndarray, rate: float, sample_ratio: float, rng: np.random.RandomState) -> np.ndarray:
     # FUSION MODIFICATION: mixed missing mode combines sample-level and feature-level missingness.
-    # The realized global missing ratio can slightly differ from `rate` due to overlap between two masks.
+    # The realized global missing ratio can slightly differ from `rate` due to overlap between two masks;
+    # users should inspect returned masks when strict realized-rate control is required.
     sample_ratio = float(np.clip(sample_ratio, 0.0, 1.0))
     sample_rate = rate * sample_ratio
     feature_rate = rate * (1.0 - sample_ratio)
